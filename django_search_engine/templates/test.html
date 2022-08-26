@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+ <div id="main">
+    <div class="resultArea">
+        <p class="resultTotal">
+            <span class="info">找到约&nbsp;<span class="totalResult">{{ total_nums }}</span>&nbsp;条结果(用时<span class="time">{{ last_seconds }}</span>秒)，共约<span class="totalPage">{{ page_nums }}</span>页</span>
+        </p>
+        <div class="resultList">
+            {% for hits in all_hits %}
+            <div class="resultItem">
+                    <div class="itemHead">
+                        <a href="{{ hits.url }}"  target="_blank" class="title">{% if s_type == "job"%}{% autoescape off %}{{ hits.title }}{% endautoescape %} | {% autoescape off %}{{ hits.company_name }}{% endautoescape %}
+                        {% else %}{% autoescape off %}{{ hits.title }}{% endautoescape %}{% endif %}</a>
+                        <span class="divsion">-</span>
+                        <span class="fileType">
+                            <span class="label">来源：</span>
+                            <span class="value">{{ hits.source_site }}</span>
+                        </span>
+                        <span class="dependValue">
+                            <span class="label">得分：</span>
+                            <span class="value">{{ hits.score }}</span>
+                        </span>
+                    </div>
+                    <div class="itemBody">{% autoescape off %}{{ hits.description }}{% endautoescape %}</div>
+                    <div class="itemFoot">
+                        <span class="info">
+                            <label>网站：</label>
+                            <span class="value">{{ hits.source_site }}</span>
+                        </span>
+                        <span class="info">
+                            <label>发布时间：</label>
+                            <span class="value">
+                                {{ hits.create_date|slice:":-9" }}
+                            </span>
+                        </span>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <!-- 分页 -->
+        <div class="pagination ue-clear"></div>
+        <!-- 相关搜索 -->
+    </div>
+
+</div><!-- End of main -->
+
+</body>
+</html>

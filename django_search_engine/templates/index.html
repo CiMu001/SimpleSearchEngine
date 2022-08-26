@@ -1,0 +1,40 @@
+<!DOCTYPE html >
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script src="https://kit.fontawesome.com/aad955e8de.js" crossorigin="anonymous"></script>
+    <link href="/static/css/indexCss.css" rel="stylesheet" />
+<!--    <link href="indexCss.css" rel="stylesheet" />-->
+<title>　搜　索　引　擎　</title>
+</head>
+<body>
+    <iframe  width="400" height="100" frameborder="0" scrolling="no" hspace="0" src="https://i.tianqi.com/?c=code&color=%23FFFFFF&a=getcode&id=35&site=34&icon=1"></iframe>
+    <div class="content">
+        <div class="logoBox">
+            <img src="/static/images/LOGO1.png" width="200px" alt="LOGO" align="bottom" border="0">
+        </div>
+        <div class="searchBox">
+            <input class="searchTxt" type="text" name="" placeholder="输入搜索内容关键字" onkeydown="keyup_submit(event)"  >
+            <a class="searchBtn" href="#" onclick="add_search()" > <i class="fa-brands fa-searchengin"></i></a>
+        </div>
+    </div>
+
+</body>
+<script type="text/javascript" src="/static/js/jquery.js"></script>
+<script type="text/javascript">
+    const search_url = "{% url 'search' %}"
+
+    add_search = function (){
+        let input_value = $(".searchTxt").val();
+        const href = search_url+'?q='+input_value;
+        console.log(href, 'href');
+        window.location.href=href;
+    }
+
+    function keyup_submit(e){
+        const evt = window.event || e;
+        if (evt.keyCode == 13){
+            add_search();
+        }
+    }
+</script>
+</html>

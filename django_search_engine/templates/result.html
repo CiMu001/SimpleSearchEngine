@@ -1,0 +1,96 @@
+<!DOCTYPE html >
+{% load  static %}
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script src="https://kit.fontawesome.com/aad955e8de.js" crossorigin="anonymous"></script>
+    <link href="/static/css/resultCss.css" rel="stylesheet" />
+    <title>{{ key_words }}  - 搜 索 </title>
+</head>
+<body>
+<div id="container">
+    <div class="headBox">
+        <span class="inputTitle"> CIMu搜索 </span>
+        <div class="searchBox">
+        <input class="searchTxt" type="text" name="" placeholder="输入搜索内容关键字" value="{{ key_words }}" onkeydown="keyup_submit(event);" />
+        <a class="searchBtn" href="#" onclick="add_search()" >
+            <i class="fa-brands fa-searchengin"></i>
+        </a>
+    </div>
+    </div>
+    <div class="resultBox" >
+        <p class="resultTotal">
+            <span class="info">找到约&nbsp;<span class="totalResult">{{total}}</span>&nbsp;条结果(用时<span class="time">{{ search_time }}</span>秒)，共约<span class="totalPage">{{ page_num }}</span>页</span>
+        </p>
+        <ul>
+            {% for hits in all_hits %}
+            <li>
+                <div class="itemHead">
+                    <a href="{{ hits.url }}" target="_blank" class="title">{% if s_type == "job"%}{% autoescape off %}{{ hits.title }}{% endautoescape %} | {% autoescape off %}{{ hits.company_name }}{% endautoescape %}
+                    {% else %}{% autoescape off %}{{ hits.title }}{% endautoescape %}{% endif %}</a>
+                    <span class="divsion">-</span>
+                    <span class="fileType">
+                        <span class="label">来源：</span>
+                        <span class="value">{{ hits.source_site }}</span>
+                    </span>
+                    <span class="dependValue">
+                        <span class="label">得分：</span>
+                        <span class="value">{{ hits.score }}</span>
+                    </span>
+                </div>
+                <div class="itemBody">{% autoescape off %}{{ hits.description }}{% endautoescape %}</div>
+                <div class="itemFoot">
+                    <span class="info">
+                        <label>网站：</label>
+                        <span class="value">{{ hits.source_site }}</span>
+                    </span>
+                    <span class="info">
+                        <label>发布时间：</label>
+                        <span class="value">
+                            {{ hits.create_date|slice:":-9" }}
+                        </span>
+                    </span>
+                </div>
+            </li>
+
+            {% endfor %}
+        </ul>
+    </div>
+    <!-- 分页 -->
+    <div class="pagination ue-clear"></div>
+
+</div>
+
+</body>
+<script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/pagination.js' %}"></script>
+<script type="text/javascript">
+    const search_url = "{% url 'search' %}"
+    const key_words = "{{ key_words }}"
+
+    add_search = function (){
+        let input_value = $(".searchTxt").val();
+        const href = search_url+'?q='+input_value;
+        console.log(href, 'href');
+        window.location.href=href;
+    }
+
+    function keyup_submit(e){
+        const evt = window.event || e;
+        if (evt.keyCode == 13){
+            add_search();
+        }
+    }
+
+    //分页
+    $(".pagination").pagination({{ total }}, {
+        current_page :{{ page|add:'-1' }}, //当前页码
+        items_per_page :15,
+        display_msg :false,
+        callback :pageselectCallback,
+    })
+
+    function pageselectCallback(page_id, jq) {
+        window.location.href=search_url+'?q='+key_words+'&p='+(page_id+1)
+    }
+</script>
+</html>
